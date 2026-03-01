@@ -13,12 +13,9 @@ export default function GateScreen() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LeadFormData>({
-    resolver: zodResolver(leadSchema),
-  });
+  } = useForm<LeadFormData>({ resolver: zodResolver(leadSchema) });
 
-  async function onSubmit(data: LeadFormData) {
-    // Fire-and-forget: never block user from seeing results if CRM fails
+  function onSubmit(data: LeadFormData) {
     fetch("/api/leads", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -45,106 +42,86 @@ export default function GateScreen() {
   }
 
   return (
-    <div className="screen justify-center">
+    <div className="screen justify-center relative overflow-hidden">
+      {/* Blurred photo background */}
+      {state.imageDataUrl && (
+        <div className="absolute inset-0">
+          <img
+            src={state.imageDataUrl}
+            alt=""
+            className="w-full h-full object-cover blur-2xl scale-110 opacity-20"
+          />
+          <div className="absolute inset-0 bg-obsidian/80" />
+        </div>
+      )}
+
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full space-y-6"
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-10 w-full space-y-8"
       >
-        {/* Blurred result preview */}
-        {state.imageDataUrl && (
-          <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden">
-            <img
-              src={state.imageDataUrl}
-              alt="Your photo"
-              className="w-full h-full object-cover blur-md scale-105"
-            />
-            <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-              <div className="text-center p-6">
-                <div className="w-12 h-12 rounded-full border-2 border-gold flex items-center justify-center mx-auto mb-3">
-                  <span className="text-gold text-xl">✓</span>
-                </div>
-                <p className="font-serif text-xl text-white">
-                  Your Analysis Is Ready
-                </p>
-                <p className="text-sm text-white/60 mt-1">
-                  Enter your details to unlock your personalized plan
-                </p>
-              </div>
-            </div>
+        {/* Header */}
+        <div className="text-center space-y-3">
+          <div className="w-10 h-10 rounded-full border border-gold/40 flex items-center justify-center mx-auto">
+            <span className="text-gold text-lg">✓</span>
           </div>
-        )}
+          <div className="gold-line" />
+          <h2 className="font-serif text-3xl font-light italic text-cream leading-tight">
+            Your Analysis<br />Is Ready
+          </h2>
+          <p className="font-sans text-[10px] text-white/40 tracking-[0.2em] font-extralight">
+            ENTER YOUR DETAILS TO UNLOCK YOUR PERSONALISED PLAN
+          </p>
+        </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <input
-                {...register("firstName")}
-                placeholder="First Name *"
-                className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder:text-white/30 text-sm focus:border-gold focus:outline-none"
-              />
-              {errors.firstName && (
-                <p className="text-red-400 text-xs mt-1">{errors.firstName.message}</p>
-              )}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="label-xs">First Name</label>
+              <input {...register("firstName")} placeholder="Sarah" className="input-field" />
+              {errors.firstName && <p className="text-red-400/70 text-[10px] mt-1">{errors.firstName.message}</p>}
             </div>
-            <div>
-              <input
-                {...register("lastName")}
-                placeholder="Last Name *"
-                className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder:text-white/30 text-sm focus:border-gold focus:outline-none"
-              />
-              {errors.lastName && (
-                <p className="text-red-400 text-xs mt-1">{errors.lastName.message}</p>
-              )}
+            <div className="space-y-1">
+              <label className="label-xs">Last Name</label>
+              <input {...register("lastName")} placeholder="Johnson" className="input-field" />
+              {errors.lastName && <p className="text-red-400/70 text-[10px] mt-1">{errors.lastName.message}</p>}
             </div>
           </div>
 
-          <div>
-            <input
-              {...register("email")}
-              type="email"
-              placeholder="Email Address *"
-              className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder:text-white/30 text-sm focus:border-gold focus:outline-none"
-            />
-            {errors.email && (
-              <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>
-            )}
+          <div className="space-y-1">
+            <label className="label-xs">Email Address</label>
+            <input {...register("email")} type="email" placeholder="sarah@example.com" className="input-field" />
+            {errors.email && <p className="text-red-400/70 text-[10px] mt-1">{errors.email.message}</p>}
           </div>
 
-          <div>
-            <input
-              {...register("phone")}
-              type="tel"
-              placeholder="Phone Number *"
-              className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder:text-white/30 text-sm focus:border-gold focus:outline-none"
-            />
-            {errors.phone && (
-              <p className="text-red-400 text-xs mt-1">{errors.phone.message}</p>
-            )}
+          <div className="space-y-1">
+            <label className="label-xs">Phone Number</label>
+            <input {...register("phone")} type="tel" placeholder="+44 7700 000000" className="input-field" />
+            {errors.phone && <p className="text-red-400/70 text-[10px] mt-1">{errors.phone.message}</p>}
           </div>
 
-          <label className="flex items-start gap-3 cursor-pointer">
-            <input
-              {...register("marketingConsent")}
-              type="checkbox"
-              className="mt-1 accent-gold"
-            />
-            <span className="text-xs text-white/50 leading-relaxed">
-              I agree to receive my analysis results and marketing communications
-              from Harley Street Aesthetics. Your data is handled in accordance with our privacy policy.
+          <label className="flex items-start gap-3 cursor-pointer group">
+            <div className="relative mt-0.5 flex-shrink-0">
+              <input {...register("marketingConsent")} type="checkbox" className="sr-only peer" />
+              <div className="w-4 h-4 border border-white/20 peer-checked:border-gold peer-checked:bg-gold/20 transition-all duration-200" />
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 peer-checked:opacity-100">
+                <span className="text-gold text-[10px]">✓</span>
+              </div>
+            </div>
+            <span className="font-sans text-[10px] text-white/30 leading-relaxed group-hover:text-white/50 transition-colors font-extralight">
+              I consent to receive my analysis results and aesthetic communications from Harley Street Aesthetics in accordance with UK data protection law.
             </span>
           </label>
-          {errors.marketingConsent && (
-            <p className="text-red-400 text-xs">{errors.marketingConsent.message}</p>
-          )}
+          {errors.marketingConsent && <p className="text-red-400/70 text-[10px]">{errors.marketingConsent.message}</p>}
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="btn-gold w-full disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-gold w-full disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? "Unlocking..." : "Unlock My Results"}
+            {isSubmitting ? "Processing..." : "Unlock My Results"}
           </button>
         </form>
       </motion.div>

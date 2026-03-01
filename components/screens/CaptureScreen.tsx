@@ -12,9 +12,7 @@ export default function CaptureScreen() {
 
   useEffect(() => {
     startCamera();
-    return () => {
-      stopCamera();
-    };
+    return () => { stopCamera(); };
   }, [startCamera, stopCamera]);
 
   function handleCapture() {
@@ -38,57 +36,106 @@ export default function CaptureScreen() {
   }
 
   return (
-    <div className="screen items-center">
+    <div className="screen items-center justify-between py-8">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="w-full flex flex-col items-center gap-6"
+        transition={{ duration: 0.5 }}
+        className="w-full flex flex-col items-center gap-5"
       >
         {/* Header */}
-        <div className="text-center space-y-1">
-          <h2 className="font-serif text-2xl text-white">Position Your Face</h2>
-          <p className="text-xs text-white/50 tracking-widest">
+        <div className="text-center space-y-1.5 w-full">
+          <p className="label-xs">Step 01</p>
+          <h2 className="font-serif text-3xl font-light italic text-cream">Position Your Face</h2>
+          <p className="font-sans text-[9px] tracking-[0.3em] text-white/30 font-extralight">
             FACE FORWARD · GOOD LIGHTING · REMOVE GLASSES
           </p>
         </div>
 
-        {/* Viewfinder */}
-        <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden bg-zinc-900">
-          {isActive && (
+        {/* Viewfinder — ornate oval mirror */}
+        <div className="relative w-full" style={{ aspectRatio: "3/4" }}>
+          {/* Outer decorative ring */}
+          <div className="absolute inset-0 rounded-[40px] border border-gold/20" />
+          {/* Inner ring */}
+          <div className="absolute inset-1 rounded-[38px] border border-gold/10" />
+
+          {/* Camera feed */}
+          <div className="absolute inset-2 rounded-[36px] overflow-hidden bg-zinc-950">
+            {/* Always render video, just hide it when not active */}
             <video
               ref={videoRef}
               autoPlay
               playsInline
               muted
-              className="absolute inset-0 w-full h-full object-cover scale-x-[-1]"
+              className={`absolute inset-0 w-full h-full object-cover scale-x-[-1] transition-opacity duration-500 ${isActive ? "opacity-100" : "opacity-0"}`}
             />
-          )}
-          {/* Oval face guide overlay */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div
-              className="border-2 border-gold/60 rounded-full"
-              style={{ width: "65%", height: "80%" }}
-            />
-          </div>
-          {error && (
-            <div className="absolute inset-0 flex items-center justify-center p-6">
-              <p className="text-white/60 text-sm text-center">{error}</p>
+
+            {/* Scanning line — only show when active */}
+            {isActive && (
+              <div
+                className="absolute inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent pointer-events-none animate-scan"
+                style={{ top: "20%" }}
+              />
+            )}
+
+            {/* Oval face guide */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div
+                className="border border-gold/40 rounded-full"
+                style={{ width: "62%", height: "78%" }}
+              />
+              {/* Corner marks */}
+              <div className="absolute top-[11%] left-[19%] w-3 h-3 border-t border-l border-gold/60" />
+              <div className="absolute top-[11%] right-[19%] w-3 h-3 border-t border-r border-gold/60" />
+              <div className="absolute bottom-[11%] left-[19%] w-3 h-3 border-b border-l border-gold/60" />
+              <div className="absolute bottom-[11%] right-[19%] w-3 h-3 border-b border-r border-gold/60" />
             </div>
-          )}
+
+            {/* Error message */}
+            {error && (
+              <div className="absolute inset-0 flex items-center justify-center p-6 bg-obsidian/80">
+                <p className="font-sans text-xs text-white/50 text-center tracking-wide">{error}</p>
+              </div>
+            )}
+
+            {/* Loading state */}
+            {!isActive && !error && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <motion.div
+                  animate={{ opacity: [0.3, 0.8, 0.3] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                  className="font-serif text-gold/40 text-lg italic"
+                >
+                  Initialising...
+                </motion.div>
+              </div>
+            )}
+          </div>
+
+          {/* Gold corner ornaments */}
+          <div className="absolute top-0 left-4 w-8 h-8 border-t-2 border-l-2 border-gold/50 rounded-tl-sm" />
+          <div className="absolute top-0 right-4 w-8 h-8 border-t-2 border-r-2 border-gold/50 rounded-tr-sm" />
+          <div className="absolute bottom-0 left-4 w-8 h-8 border-b-2 border-l-2 border-gold/50 rounded-bl-sm" />
+          <div className="absolute bottom-0 right-4 w-8 h-8 border-b-2 border-r-2 border-gold/50 rounded-br-sm" />
         </div>
 
-        {/* Hidden canvas for capture */}
+        {/* Hidden canvas */}
         <canvas ref={canvasRef} className="hidden" />
 
         {/* Actions */}
-        <div className="w-full space-y-3">
+        <div className="w-full space-y-2.5">
           {isActive && (
-            <button className="btn-gold w-full" onClick={handleCapture}>
-              Take Photo
-            </button>
+            <motion.button
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="btn-gold w-full"
+              onClick={handleCapture}
+            >
+              Capture Photo
+            </motion.button>
           )}
           <button
-            className="btn-outline-gold w-full"
+            className="btn-outline w-full"
             onClick={() => fileInputRef.current?.click()}
           >
             Upload from Gallery
@@ -103,10 +150,10 @@ export default function CaptureScreen() {
         </div>
 
         <button
-          className="text-white/30 text-xs"
+          className="font-sans text-[9px] text-white/20 tracking-widest uppercase hover:text-white/40 transition-colors"
           onClick={() => dispatch({ type: "SET_SCREEN", screen: "landing" })}
         >
-          ← Back
+          ← Return
         </button>
       </motion.div>
     </div>

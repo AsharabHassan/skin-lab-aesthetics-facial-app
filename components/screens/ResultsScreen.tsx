@@ -17,60 +17,68 @@ export default function ResultsScreen() {
   }
 
   return (
-    <div className="screen pb-8">
+    <div className="screen pb-12">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="w-full space-y-6"
+        transition={{ duration: 0.5 }}
+        className="w-full space-y-7"
       >
         {/* Header */}
-        <div>
-          <p className="text-gold text-xs tracking-widest">YOUR ANALYSIS</p>
-          <h2 className="font-serif text-2xl text-white mt-1">
-            {leadData?.firstName ? `${leadData.firstName}'s ` : ""}Facial Assessment
+        <div className="space-y-1">
+          <p className="label-xs">Your Personalised Report</p>
+          <h2 className="font-serif text-3xl font-light italic text-cream leading-tight">
+            {leadData?.firstName ? `${leadData.firstName}'s ` : ""}Facial<br />Assessment
           </h2>
           {analysisResult.faceShape && (
-            <p className="text-white/50 text-sm mt-1">
-              Face shape: <span className="capitalize text-white/70">{analysisResult.faceShape}</span>
-            </p>
+            <div className="flex items-center gap-2 mt-2">
+              <div className="h-px flex-1 bg-white/5" />
+              <p className="font-sans text-[9px] text-white/30 tracking-widest uppercase">
+                {analysisResult.faceShape} face
+              </p>
+              <div className="h-px flex-1 bg-white/5" />
+            </div>
           )}
         </div>
 
         {/* Photo with overlay */}
-        <FaceOverlay
-          imageDataUrl={imageDataUrl}
-          zones={analysisResult.zones}
-          activeZoneId={activeZoneId}
-          onZoneClick={setActiveZoneId}
-        />
+        <div className="relative">
+          <div className="absolute inset-0 -m-1 border border-gold/10 pointer-events-none z-10" />
+          <FaceOverlay
+            imageDataUrl={imageDataUrl}
+            zones={analysisResult.zones}
+            activeZoneId={activeZoneId}
+            onZoneClick={setActiveZoneId}
+          />
+          <p className="text-center font-sans text-[9px] text-white/20 mt-2 tracking-widest">
+            TAP MARKERS TO EXPLORE ZONES
+          </p>
+        </div>
 
         {/* AI Summary */}
-        <div className="bg-zinc-900 rounded-2xl p-4 border border-zinc-800">
-          <p className="text-gold text-xs tracking-widest mb-2">AI ASSESSMENT</p>
-          <p className="text-white/80 text-sm leading-relaxed">
+        <div className="relative border-l-2 border-gold/40 pl-4 py-1">
+          <p className="label-xs mb-2">AI Assessment</p>
+          <p className="font-sans text-xs text-white/50 leading-relaxed font-extralight">
             {analysisResult.overallSummary}
           </p>
         </div>
 
         {/* Zone cards */}
-        <div className="space-y-3">
-          <p className="text-white/50 text-xs tracking-widest">TAP A ZONE TO EXPAND</p>
+        <div className="space-y-1.5">
           {analysisResult.zones.map((zone) => (
             <ZoneCard
               key={zone.id}
               zone={zone}
               isActive={activeZoneId === zone.id}
-              onClick={() =>
-                setActiveZoneId(activeZoneId === zone.id ? null : zone.id)
-              }
+              onClick={() => setActiveZoneId(activeZoneId === zone.id ? null : zone.id)}
             />
           ))}
         </div>
 
         {/* Disclaimer */}
-        <p className="text-white/25 text-xs text-center leading-relaxed">
-          Results are AI-generated suggestions for informational purposes only.
-          Final treatment plans are determined at in-person consultation.
+        <p className="font-sans text-[9px] text-white/15 text-center leading-relaxed tracking-wide font-extralight">
+          AI-generated suggestions for informational purposes only.<br />
+          Treatment plans confirmed at in-person consultation.
         </p>
 
         {/* CTA */}
@@ -78,7 +86,7 @@ export default function ResultsScreen() {
           className="btn-gold w-full"
           onClick={() => dispatch({ type: "SET_SCREEN", screen: "booking" })}
         >
-          Book My Free Consultation
+          Book Consultation
         </button>
       </motion.div>
     </div>

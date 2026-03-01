@@ -1,6 +1,6 @@
 {
   "name": "Harley Street Aesthetics",
-  "short_name": "HSW",
+  "short_name": "HSA",
   "description": "AI-powered facial analysis for personalized aesthetic treatment recommendations by Harley Street Aesthetics",
   "start_url": "/",
   "display": "standalone",

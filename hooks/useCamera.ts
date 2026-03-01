@@ -5,32 +5,42 @@ import { useRef, useState, useCallback } from "react";
 export function useCamera() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const startingRef = useRef(false);
   const [isActive, setIsActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const stopCamera = useCallback(() => {
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
+    startingRef.current = false;
+    if (videoRef.current) videoRef.current.srcObject = null;
+    setIsActive(false);
+  }, []);
+
   const startCamera = useCallback(async () => {
+    if (startingRef.current || streamRef.current) return;
+    startingRef.current = true;
+    setError(null);
     try {
       const s = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user", width: { ideal: 720 }, height: { ideal: 960 } },
       });
+      if (!startingRef.current) {
+        s.getTracks().forEach((t) => t.stop());
+        return;
+      }
+      streamRef.current = s;
       if (videoRef.current) {
         videoRef.current.srcObject = s;
-        videoRef.current.play();
+        await videoRef.current.play().catch(() => {});
       }
-      setStream(s);
       setIsActive(true);
-      setError(null);
     } catch {
+      startingRef.current = false;
       setError("Camera access denied. Please upload a photo instead.");
     }
   }, []);
-
-  const stopCamera = useCallback(() => {
-    stream?.getTracks().forEach((t) => t.stop());
-    setStream(null);
-    setIsActive(false);
-  }, [stream]);
 
   const capturePhoto = useCallback((): string | null => {
     if (!videoRef.current || !canvasRef.current) return null;
