@@ -4,7 +4,7 @@ const GHL_API_BASE = "https://services.leadconnectorhq.com";
 
 export async function POST(req: NextRequest) {
   try {
-    const { firstName, lastName, email, phone } = await req.json();
+    const { firstName, lastName, email, phone, marketingConsent } = await req.json();
 
     const response = await fetch(`${GHL_API_BASE}/contacts/`, {
       method: "POST",
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
         email,
         phone,
         locationId: process.env.GHL_LOCATION_ID,
-        tags: ["filler-analysis-lead"],
+        tags: ["filler-analysis-lead", ...(marketingConsent ? ["marketing-consent-given"] : [])],
         source: "Harley Street Aesthetics Filler Analysis App",
       }),
     });

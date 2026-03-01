@@ -25,11 +25,9 @@ export default function AnalyzingScreen() {
           dispatch({ type: "SET_ANALYSIS", result: data.result });
           dispatch({ type: "SET_SCREEN", screen: "gate" });
         } else {
-          alert("Analysis failed. Please try again.");
           dispatch({ type: "SET_SCREEN", screen: "capture" });
         }
       } catch {
-        alert("Analysis failed. Please try again.");
         dispatch({ type: "SET_SCREEN", screen: "capture" });
       }
     }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaceZone } from "@/lib/types";
 
 const SEVERITY_COLORS = {
@@ -17,6 +17,12 @@ interface Props {
 
 export default function ZoneCard({ zone, isActive, onClick }: Props) {
   const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    if (isActive) {
+      setExpanded(true);
+    }
+  }, [isActive]);
 
   return (
     <div

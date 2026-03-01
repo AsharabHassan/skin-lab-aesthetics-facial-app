@@ -1,9 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
+import { z } from "zod";
 import { FILLER_ANALYSIS_PROMPT } from "@/lib/prompts";
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
+});
+
+const MAX_BASE64_BYTES = 5 * 1024 * 1024; // 5 MB
+
+const faceZoneSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  concern: z.string(),
+  recommendation: z.string(),
+  severity: z.enum(["none", "mild", "moderate"]),
+  overlayRegion: z.enum(["forehead", "temples", "undereyes", "cheeks", "lips", "jawline"]),
+});
+
+const analysisResultSchema = z.object({
+  faceShape: z.string(),
+  overallSummary: z.string(),
+  zones: z.array(faceZoneSchema).length(6),
 });
 
 export async function POST(req: NextRequest) {
@@ -14,8 +32,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid image data" }, { status: 400 });
     }
 
-    // Extract base64 from data URL
     const base64 = imageDataUrl.split(",")[1];
+
+    if (base64.length > MAX_BASE64_BYTES) {
+      return NextResponse.json(
+        { error: "Image too large. Please use a smaller photo." },
+        { status: 413 }
+      );
+    }
+
     const mediaType = imageDataUrl.split(";")[0].split(":")[1] as
       | "image/jpeg"
       | "image/png"
@@ -23,7 +48,7 @@ export async function POST(req: NextRequest) {
 
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-6",
-      max_tokens: 1024,
+      max_tokens: 2048,
       messages: [
         {
           role: "user",
@@ -44,10 +69,27 @@ export async function POST(req: NextRequest) {
     const responseText =
       message.content[0].type === "text" ? message.content[0].text : "";
 
-    // Parse JSON from response
-    const result = JSON.parse(responseText);
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(responseText);
+    } catch {
+      console.error("Claude returned non-JSON:", responseText.slice(0, 200));
+      return NextResponse.json(
+        { error: "Analysis failed. Please try again." },
+        { status: 500 }
+      );
+    }
 
-    return NextResponse.json({ result });
+    const result = analysisResultSchema.safeParse(parsed);
+    if (!result.success) {
+      console.error("Claude response failed schema validation:", result.error);
+      return NextResponse.json(
+        { error: "Analysis failed. Please try again." },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ result: result.data });
   } catch (error) {
     console.error("Analysis error:", error);
     return NextResponse.json(

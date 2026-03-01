@@ -7,12 +7,15 @@ import { useCamera } from "@/hooks/useCamera";
 
 export default function CaptureScreen() {
   const { dispatch } = useApp();
-  const { videoRef, canvasRef, isActive, error, startCamera, capturePhoto } = useCamera();
+  const { videoRef, canvasRef, isActive, error, startCamera, stopCamera, capturePhoto } = useCamera();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     startCamera();
-  }, [startCamera]);
+    return () => {
+      stopCamera();
+    };
+  }, [startCamera, stopCamera]);
 
   function handleCapture() {
     const dataUrl = capturePhoto();
@@ -94,7 +97,6 @@ export default function CaptureScreen() {
             ref={fileInputRef}
             type="file"
             accept="image/*"
-            capture="user"
             className="hidden"
             onChange={handleFileUpload}
           />

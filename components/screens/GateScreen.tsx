@@ -18,33 +18,30 @@ export default function GateScreen() {
   });
 
   async function onSubmit(data: LeadFormData) {
-    try {
-      const res = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...data,
-          analysisResult: state.analysisResult,
-        }),
-      });
-      if (res.ok) {
-        dispatch({
-          type: "SET_LEAD",
-          lead: {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
-            phone: data.phone,
-            marketingConsent: data.marketingConsent,
-          },
-        });
-        dispatch({ type: "SET_SCREEN", screen: "results" });
-      } else {
-        alert("Something went wrong. Please try again.");
-      }
-    } catch {
-      alert("Something went wrong. Please try again.");
-    }
+    // Fire-and-forget: never block user from seeing results if CRM fails
+    fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        marketingConsent: data.marketingConsent,
+      }),
+    }).catch((err) => console.error("Lead submission error:", err));
+
+    dispatch({
+      type: "SET_LEAD",
+      lead: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        marketingConsent: data.marketingConsent,
+      },
+    });
+    dispatch({ type: "SET_SCREEN", screen: "results" });
   }
 
   return (
