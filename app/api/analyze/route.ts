@@ -69,9 +69,16 @@ export async function POST(req: NextRequest) {
     const responseText =
       message.content[0].type === "text" ? message.content[0].text : "";
 
+    // Strip markdown code fences if Claude wraps the JSON (e.g. ```json ... ```)
+    const cleanedText = responseText
+      .trim()
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/\s*```$/, "")
+      .trim();
+
     let parsed: unknown;
     try {
-      parsed = JSON.parse(responseText);
+      parsed = JSON.parse(cleanedText);
     } catch {
       console.error("Claude returned non-JSON:", responseText.slice(0, 200));
       return NextResponse.json(

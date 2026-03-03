@@ -3,14 +3,15 @@
 import { useEffect, useRef } from "react";
 import { FaceZone } from "@/lib/types";
 
-// Relative positions (x%, y%) for each zone marker on a portrait face photo
+// Positions as % of image dimensions, calibrated for a mirrored selfie
+// where the face fills roughly the central 60-80% of the frame.
 const ZONE_POSITIONS: Record<string, { x: number; y: number }> = {
-  forehead:  { x: 50, y: 18 },
-  temples:   { x: 22, y: 28 },
-  undereyes: { x: 62, y: 42 },
-  cheeks:    { x: 25, y: 54 },
-  lips:      { x: 50, y: 66 },
-  jawline:   { x: 68, y: 78 },
+  forehead:  { x: 50, y: 28 },
+  temples:   { x: 42, y: 36 },
+  undereyes: { x: 60, y: 44 },
+  cheeks:    { x: 42, y: 56 },
+  lips:      { x: 50, y: 65 },
+  jawline:   { x: 50, y: 78 },
 };
 
 interface Props {
@@ -69,23 +70,23 @@ export default function FaceOverlay({ imageDataUrl, zones, activeZoneId, onZoneC
     img.src = imageDataUrl;
   }, [imageDataUrl, zones, activeZoneId]);
 
-  function handleCanvasClick(e: React.MouseEvent<HTMLCanvasElement>) {
+  function hitTest(clientX: number, clientY: number) {
     if (!onZoneClick) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-    const clickX = (e.clientX - rect.left) * scaleX;
-    const clickY = (e.clientY - rect.top) * scaleY;
+    const px = (clientX - rect.left) * scaleX;
+    const py = (clientY - rect.top) * scaleY;
 
     for (const zone of zones) {
       const pos = ZONE_POSITIONS[zone.overlayRegion];
       if (!pos) continue;
       const x = (pos.x / 100) * canvas.width;
       const y = (pos.y / 100) * canvas.height;
-      const r = canvas.width * 0.06;
-      const dist = Math.sqrt((clickX - x) ** 2 + (clickY - y) ** 2);
+      const r = canvas.width * 0.08;
+      const dist = Math.sqrt((px - x) ** 2 + (py - y) ** 2);
       if (dist <= r) {
         onZoneClick(zone.id);
         return;
@@ -93,10 +94,21 @@ export default function FaceOverlay({ imageDataUrl, zones, activeZoneId, onZoneC
     }
   }
 
+  function handleClick(e: React.MouseEvent<HTMLCanvasElement>) {
+    hitTest(e.clientX, e.clientY);
+  }
+
+  function handleTouch(e: React.TouchEvent<HTMLCanvasElement>) {
+    e.preventDefault();
+    const touch = e.changedTouches[0];
+    if (touch) hitTest(touch.clientX, touch.clientY);
+  }
+
   return (
     <canvas
       ref={canvasRef}
-      onClick={handleCanvasClick}
+      onClick={handleClick}
+      onTouchEnd={handleTouch}
       className="w-full rounded-2xl cursor-pointer"
     />
   );

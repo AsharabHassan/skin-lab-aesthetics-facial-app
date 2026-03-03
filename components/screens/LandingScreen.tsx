@@ -6,82 +6,70 @@ import { useApp } from "@/lib/store";
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+  show: { transition: { staggerChildren: 0.11, delayChildren: 0.05 } },
 };
-
 const item = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
 };
 
 export default function LandingScreen() {
   const { dispatch } = useApp();
 
   return (
-    <div className="screen items-center justify-center text-center relative overflow-hidden">
-      {/* Ambient gold glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-gold/5 blur-[100px] pointer-events-none" />
+    <div className="screen justify-between relative overflow-hidden">
 
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="flex flex-col items-center gap-7 relative z-10"
-      >
-        {/* Logo */}
-        <motion.div variants={item}>
-          <Image src="/logo.svg" alt="Harley Street Aesthetics" width={160} height={72} priority />
+      {/* Top — logo */}
+      <motion.div variants={container} initial="hidden" animate="show" className="flex flex-col gap-6 w-full pt-2">
+        <motion.div variants={item} className="flex items-center justify-between w-full">
+          <Image src="/logo.svg" alt="HSA" width={52} height={52} priority />
+          <span className="label-xs">Est. Harley Street</span>
         </motion.div>
 
-        {/* Label */}
-        <motion.p variants={item} className="label-xs">
-          Harley Street Aesthetics
-        </motion.p>
+        {/* Thin rule */}
+        <motion.div variants={item} className="w-full h-px bg-gold/20" />
 
-        {/* Hairline divider */}
-        <motion.div variants={item} className="flex items-center gap-4 w-full max-w-[200px]">
-          <div className="flex-1 h-px bg-gold/30" />
-          <div className="w-1 h-1 rounded-full bg-gold/50" />
-          <div className="flex-1 h-px bg-gold/30" />
-        </motion.div>
-
-        {/* Headline */}
-        <motion.div variants={item} className="space-y-2">
-          <h1 className="font-serif text-[2.6rem] font-light leading-[1.08] text-cream italic">
-            Reveal Your<br />Aesthetic Potential
+        {/* Hero headline */}
+        <motion.div variants={item} className="space-y-0">
+          <p className="label-xs mb-3">AI Facial Analysis</p>
+          <h1 className="font-serif text-[3.8rem] font-normal leading-[0.95] text-cream italic tracking-tight">
+            Reveal<br />Your<br />Aesthetic<br />Potential.
           </h1>
-          <p className="font-sans text-[10px] tracking-[0.3em] text-white/40 font-extralight uppercase mt-3">
-            AI-Powered Facial Analysis
-          </p>
         </motion.div>
 
-        {/* Feature pills */}
-        <motion.div variants={item} className="flex flex-col gap-2.5 w-full">
+        {/* Feature rows — Space Mono data table */}
+        <motion.div variants={item} className="w-full mt-2">
           {[
-            { num: "01", label: "Facial Structure Analysis" },
-            { num: "02", label: "6-Zone Personalised Assessment" },
-            { num: "03", label: "Complimentary Consultation" },
-          ].map(({ num, label }) => (
-            <div key={num} className="flex items-center gap-3 px-4 py-2.5 card-dark">
-              <span className="font-sans text-[9px] text-gold/60 tracking-widest">{num}</span>
-              <div className="w-px h-3 bg-gold/20" />
-              <span className="font-sans text-[11px] text-white/60 tracking-wider font-light">{label}</span>
+            { code: "001", label: "Facial Structure Analysis" },
+            { code: "002", label: "6-Zone Deep Assessment" },
+            { code: "003", label: "Free Online Consultation" },
+          ].map(({ code, label }) => (
+            <div key={code} className="flex items-center gap-4 py-3 border-b border-gold/10 first:border-t">
+              <span className="font-mono text-[9px] text-gold/40 w-7 flex-shrink-0">{code}</span>
+              <div className="w-px h-3 bg-gold/15 flex-shrink-0" />
+              <span className="font-mono text-[10px] text-cream/50 tracking-wide">{label}</span>
+              <span className="ml-auto font-mono text-[8px] text-gold/25">●</span>
             </div>
           ))}
         </motion.div>
+      </motion.div>
 
-        {/* CTA */}
-        <motion.div variants={item} className="w-full space-y-3">
-          <button
-            className="btn-gold w-full"
-            onClick={() => dispatch({ type: "SET_SCREEN", screen: "capture" })}
-          >
-            Begin Your Analysis
-          </button>
-          <p className="font-sans text-[9px] text-white/20 tracking-wider">
-            Private &amp; secure — your image is never stored
-          </p>
-        </motion.div>
+      {/* Bottom — CTA */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full space-y-3 pb-4"
+      >
+        <button
+          className="btn-gold w-full"
+          onClick={() => dispatch({ type: "SET_SCREEN", screen: "capture" })}
+        >
+          Begin Analysis →
+        </button>
+        <p className="font-mono text-[8px] text-center text-white/20 tracking-widest">
+          PRIVATE · SECURE · IMAGE NOT STORED
+        </p>
       </motion.div>
     </div>
   );

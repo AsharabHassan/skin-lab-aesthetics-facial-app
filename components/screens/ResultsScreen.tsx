@@ -22,49 +22,49 @@ export default function ResultsScreen() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full space-y-7"
+        className="w-full space-y-6"
       >
-        {/* Header */}
-        <div className="space-y-1">
-          <p className="label-xs">Your Personalised Report</p>
-          <h2 className="font-serif text-3xl font-light italic text-cream leading-tight">
-            {leadData?.firstName ? `${leadData.firstName}'s ` : ""}Facial<br />Assessment
+        {/* Report header */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="label-xs">Facial Analysis Report</span>
+            <span className="font-mono text-[8px] text-gold/30 tracking-wider">
+              {analysisResult.faceShape?.toUpperCase()} FACE
+            </span>
+          </div>
+          <div className="w-full h-px bg-gold/15" />
+          <h2 className="font-serif text-[2.8rem] font-normal italic text-cream leading-[1.0]">
+            {leadData?.firstName ? `${leadData.firstName}'s` : "Your"}<br />
+            Assessment.
           </h2>
-          {analysisResult.faceShape && (
-            <div className="flex items-center gap-2 mt-2">
-              <div className="h-px flex-1 bg-white/5" />
-              <p className="font-sans text-[9px] text-white/30 tracking-widest uppercase">
-                {analysisResult.faceShape} face
-              </p>
-              <div className="h-px flex-1 bg-white/5" />
-            </div>
-          )}
         </div>
 
         {/* Photo with overlay */}
         <div className="relative">
-          <div className="absolute inset-0 -m-1 border border-gold/10 pointer-events-none z-10" />
           <FaceOverlay
             imageDataUrl={imageDataUrl}
             zones={analysisResult.zones}
             activeZoneId={activeZoneId}
             onZoneClick={setActiveZoneId}
           />
-          <p className="text-center font-sans text-[9px] text-white/20 mt-2 tracking-widest">
-            TAP MARKERS TO EXPLORE ZONES
-          </p>
+          {/* Bottom bar */}
+          <div className="mt-2 flex items-center justify-between">
+            <span className="font-mono text-[8px] text-white/20 tracking-widest">TAP ZONE TO INSPECT</span>
+            <span className="font-mono text-[8px] text-gold/30">{analysisResult.zones.length} ZONES</span>
+          </div>
         </div>
 
-        {/* AI Summary */}
-        <div className="relative border-l-2 border-gold/40 pl-4 py-1">
-          <p className="label-xs mb-2">AI Assessment</p>
-          <p className="font-sans text-xs text-white/50 leading-relaxed font-extralight">
+        {/* AI summary */}
+        <div className="border-l-2 border-gold/30 pl-4 py-1 space-y-1.5">
+          <p className="label-xs">Specialist Assessment</p>
+          <p className="font-serif text-[1.05rem] italic text-cream/70 leading-relaxed">
             {analysisResult.overallSummary}
           </p>
         </div>
 
         {/* Zone cards */}
-        <div className="space-y-1.5">
+        <div className="space-y-1">
+          <p className="label-xs mb-3">Zone Breakdown</p>
           {analysisResult.zones.map((zone) => (
             <ZoneCard
               key={zone.id}
@@ -76,9 +76,9 @@ export default function ResultsScreen() {
         </div>
 
         {/* Disclaimer */}
-        <p className="font-sans text-[9px] text-white/15 text-center leading-relaxed tracking-wide font-extralight">
-          AI-generated suggestions for informational purposes only.<br />
-          Treatment plans confirmed at in-person consultation.
+        <p className="font-mono text-[8px] text-white/15 text-center leading-relaxed tracking-wide">
+          AI-GENERATED · FOR INFORMATIONAL PURPOSES ONLY<br />
+          TREATMENT PLANS CONFIRMED AT CONSULTATION
         </p>
 
         {/* CTA */}
@@ -86,7 +86,7 @@ export default function ResultsScreen() {
           className="btn-gold w-full"
           onClick={() => dispatch({ type: "SET_SCREEN", screen: "booking" })}
         >
-          Book Consultation
+          Book Free Online Consultation →
         </button>
       </motion.div>
     </div>
