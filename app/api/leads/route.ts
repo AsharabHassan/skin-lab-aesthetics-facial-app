@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { firstName, lastName, email, phone, marketingConsent } = await req.json();
+    const { firstName, lastName, email, phone, marketingConsent, analysisResult } = await req.json();
 
     const webhookUrl = process.env.WEBHOOK_URL;
     if (!webhookUrl) {
@@ -14,11 +14,17 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        // Contact details
         firstName,
         lastName,
         email,
         phone,
         marketingConsent,
+        // Face analysis data
+        faceShape: analysisResult?.faceShape ?? null,
+        overallSummary: analysisResult?.overallSummary ?? null,
+        zones: analysisResult?.zones ?? [],
+        // Meta
         source: "Harley Street Aesthetics Filler Analysis App",
         submittedAt: new Date().toISOString(),
       }),
