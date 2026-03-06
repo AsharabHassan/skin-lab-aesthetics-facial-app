@@ -16,6 +16,22 @@ export default function GateScreen() {
   } = useForm<LeadFormData>({ resolver: zodResolver(leadSchema) });
 
   function onSubmit(data: LeadFormData) {
+    // Generate unique event ID for Meta CAPI deduplication
+    const metaEventId = crypto.randomUUID();
+
+    // Collect Meta cookies for CAPI
+    const getCookie = (name: string) => {
+      const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+      return match ? match[2] : null;
+    };
+    const fbp = getCookie("_fbp");
+    const fbc = getCookie("_fbc");
+
+    // Fire Meta Pixel Lead event client-side (for deduplication with CAPI)
+    if (typeof window !== "undefined" && (window as any).fbq) {
+      (window as any).fbq("track", "Lead", {}, { eventID: metaEventId });
+    }
+
     fetch("/api/leads", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -26,6 +42,12 @@ export default function GateScreen() {
         phone: data.phone,
         marketingConsent: data.marketingConsent,
         analysisResult: state.analysisResult,
+        // Meta CAPI fields
+        metaEventId,
+        metaEventSourceUrl: window.location.href,
+        metaUserAgent: navigator.userAgent,
+        metaFbp: fbp,
+        metaFbc: fbc,
       }),
     }).catch((err) => console.error("Lead submission error:", err));
 
