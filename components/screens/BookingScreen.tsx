@@ -25,7 +25,7 @@ export default function BookingScreen() {
 
         {/* Top bar */}
         <motion.div variants={item} className="flex items-center justify-between">
-          <Image src="/logo.svg" alt="Harley Street Aesthetics" width={48} height={48} />
+          <Image src="/logo.webp" alt="Skin Lab Aesthetics" width={110} height={39} style={{ objectFit: "contain" }} />
           <span className="label-xs">Step 03 / 03</span>
         </motion.div>
 

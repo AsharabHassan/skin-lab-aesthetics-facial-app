@@ -10,9 +10,9 @@ const config: Config = {
     extend: {
       colors: {
         gold: {
-          DEFAULT: "#C49840",
-          light: "#D4B060",
-          dark: "#9A7628",
+          DEFAULT: "#ddbe59",
+          light: "#e8cf7a",
+          dark: "#b09940",
         },
         cream: "#EDE6D6",
         obsidian: "#060509",
@@ -38,8 +38,8 @@ const config: Config = {
           "100%": { transform: "translateY(900%)", opacity: "0" },
         },
         pulseGold: {
-          "0%, 100%": { boxShadow: "0 0 0 0 rgba(196,152,64,0)" },
-          "50%":      { boxShadow: "0 0 0 8px rgba(196,152,64,0.1)" },
+          "0%, 100%": { boxShadow: "0 0 0 0 rgba(221,190,89,0)" },
+          "50%":      { boxShadow: "0 0 0 8px rgba(221,190,89,0.1)" },
         },
         shimmer: {
           "0%":   { backgroundPosition: "-200% 0" },

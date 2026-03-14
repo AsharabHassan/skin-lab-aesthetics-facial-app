@@ -28,7 +28,7 @@ export default function ZoneCard({ zone, isActive, onClick }: Props) {
     <motion.div
       layout
       className="cursor-pointer transition-colors duration-200 border-b border-white/5"
-      style={{ borderLeft: `2px solid ${isActive ? "#C49840" : zone.severity === "none" ? "rgba(255,255,255,0.06)" : "rgba(196,152,64,0.35)"}` }}
+      style={{ borderLeft: `2px solid ${isActive ? "#ddbe59" : zone.severity === "none" ? "rgba(255,255,255,0.06)" : "rgba(221,190,89,0.35)"}` }}
       onClick={() => { onClick(); setExpanded((v) => !v); }}
     >
       <div className="flex items-center gap-3 py-3 pl-3 pr-2">

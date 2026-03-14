@@ -97,7 +97,7 @@ export default function AnalyzingScreen() {
           {/* Scan line */}
           <motion.div
             className="absolute inset-x-0 h-[2px] pointer-events-none"
-            style={{ background: "linear-gradient(90deg, transparent, rgba(196,152,64,0.6), transparent)" }}
+            style={{ background: "linear-gradient(90deg, transparent, rgba(221,190,89,0.6), transparent)" }}
             animate={{ top: ["10%", "90%"] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
           />
@@ -113,7 +113,7 @@ export default function AnalyzingScreen() {
       >
         {/* Top status bar */}
         <div className="flex items-center justify-between">
-          <span className="label-xs">HSA · Analysis Engine</span>
+          <span className="label-xs">SLA · Analysis Engine</span>
           <span className="font-mono text-[8px] text-gold/40 tracking-widest">
             SYS.ACTIVE <span className="animate-blink">▮</span>
           </span>
@@ -145,13 +145,13 @@ export default function AnalyzingScreen() {
                 transition={{ duration: 0.2 }}
               >
                 <span className="text-gold/50 w-5">{zone.id}</span>
-                <span className="text-[8px] tracking-widest" style={{ color: isActive ? "#C49840" : isDone ? "rgba(237,230,214,0.5)" : "rgba(237,230,214,0.2)" }}>
+                <span className="text-[8px] tracking-widest" style={{ color: isActive ? "#ddbe59" : isDone ? "rgba(237,230,214,0.5)" : "rgba(237,230,214,0.2)" }}>
                   {zone.name}
                 </span>
-                <span className="flex-1 text-[8px]" style={{ color: "rgba(196,152,64,0.2)" }}>
+                <span className="flex-1 text-[8px]" style={{ color: "rgba(221,190,89,0.2)" }}>
                   {"·".repeat(14)}
                 </span>
-                <span className="text-[9px] w-12 text-right" style={{ color: isDone ? "rgba(196,152,64,0.6)" : isActive ? "#C49840" : "rgba(255,255,255,0.1)" }}>
+                <span className="text-[9px] w-12 text-right" style={{ color: isDone ? "rgba(221,190,89,0.6)" : isActive ? "#ddbe59" : "rgba(255,255,255,0.1)" }}>
                   {isDone ? "DONE" : isActive ? "SCAN" : "WAIT"}
                 </span>
               </motion.div>

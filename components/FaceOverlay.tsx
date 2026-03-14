@@ -49,14 +49,14 @@ export default function FaceOverlay({ imageDataUrl, zones, activeZoneId, onZoneC
         // Outer ring
         ctx.beginPath();
         ctx.arc(x, y, r + 4, 0, Math.PI * 2);
-        ctx.strokeStyle = isActive ? "#CEA336" : hasConcern ? "rgba(206,163,54,0.6)" : "rgba(255,255,255,0.3)";
+        ctx.strokeStyle = isActive ? "#ddbe59" : hasConcern ? "rgba(221,190,89,0.6)" : "rgba(255,255,255,0.3)";
         ctx.lineWidth = 2;
         ctx.stroke();
 
         // Filled circle
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fillStyle = isActive ? "#CEA336" : hasConcern ? "rgba(206,163,54,0.85)" : "rgba(255,255,255,0.2)";
+        ctx.fillStyle = isActive ? "#ddbe59" : hasConcern ? "rgba(221,190,89,0.85)" : "rgba(255,255,255,0.2)";
         ctx.fill();
 
         // Number label

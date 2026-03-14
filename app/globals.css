@@ -16,8 +16,8 @@
     -webkit-font-smoothing: antialiased;
     /* Subtle technical grid */
     background-image:
-      linear-gradient(rgba(196,152,64,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(196,152,64,0.03) 1px, transparent 1px);
+      linear-gradient(rgba(221,190,89,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(221,190,89,0.03) 1px, transparent 1px);
     background-size: 32px 32px;
   }
 
@@ -43,8 +43,8 @@
     @apply relative overflow-hidden font-mono font-bold text-obsidian uppercase transition-all duration-300 px-8 py-4 block;
     font-size: 10px;
     letter-spacing: 0.2em;
-    background: linear-gradient(180deg, #D4AE50 0%, #AA8020 100%);
-    box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset, 0 4px 20px rgba(196,152,64,0.2);
+    background: linear-gradient(180deg, #ddbe59 0%, #b09940 100%);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset, 0 4px 20px rgba(221,190,89,0.2);
   }
 
   .btn-gold::after {
@@ -71,15 +71,15 @@
     @apply relative font-mono font-bold uppercase transition-all duration-300 px-8 py-4 block;
     font-size: 10px;
     letter-spacing: 0.2em;
-    border: 1px solid rgba(196,152,64,0.4);
-    color: rgba(196,152,64,0.8);
+    border: 1px solid rgba(221,190,89,0.4);
+    color: rgba(221,190,89,0.8);
     background: transparent;
   }
 
   .btn-outline:hover {
-    border-color: #C49840;
-    color: #C49840;
-    background: rgba(196,152,64,0.05);
+    border-color: #ddbe59;
+    color: #ddbe59;
+    background: rgba(221,190,89,0.05);
   }
 
   .btn-outline:active {
@@ -92,7 +92,7 @@
     font-size: 8px;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: rgba(196,152,64,0.55);
+    color: rgba(221,190,89,0.55);
     font-weight: 400;
   }
 
@@ -110,13 +110,13 @@
   }
 
   .input-field:focus {
-    border-bottom-color: rgba(196,152,64,0.5);
+    border-bottom-color: rgba(221,190,89,0.5);
   }
 
   /* Card */
   .card-dark {
     background: rgba(17,14,9,0.8);
-    border: 1px solid rgba(196,152,64,0.08);
+    border: 1px solid rgba(221,190,89,0.08);
   }
 
   /* Gold ornament line */
@@ -124,7 +124,7 @@
     display: block;
     width: 40px;
     height: 1px;
-    background: rgba(196,152,64,0.35);
+    background: rgba(221,190,89,0.35);
     margin: 0 auto;
   }
 
@@ -138,6 +138,6 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: rgba(196,152,64,0.2);
+    background: rgba(221,190,89,0.2);
   }
 }

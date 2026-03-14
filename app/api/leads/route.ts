@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
         meta_hashed_last_name:   lastName  ? sha256(lastName)  : null,
 
         // ── Meta ────────────────────────────────────────
-        source:      "Harley Street Aesthetics Filler Analysis App",
+        source:      "Skin Lab Aesthetics Filler Analysis App",
         submittedAt: new Date().toISOString(),
       }),
     });

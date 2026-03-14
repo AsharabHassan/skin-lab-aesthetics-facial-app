@@ -22,8 +22,8 @@ export default function LandingScreen() {
       {/* Top — logo */}
       <motion.div variants={container} initial="hidden" animate="show" className="flex flex-col gap-6 w-full pt-2">
         <motion.div variants={item} className="flex items-center justify-between w-full">
-          <Image src="/logo.svg" alt="HSA" width={52} height={52} priority />
-          <span className="label-xs">Est. Harley Street</span>
+          <Image src="/logo.webp" alt="Skin Lab Aesthetics" width={120} height={43} priority style={{ objectFit: "contain" }} />
+          <span className="label-xs">Skin Lab Aesthetics</span>
         </motion.div>
 
         {/* Thin rule */}

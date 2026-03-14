@@ -1,7 +1,7 @@
 {
-  "name": "Harley Street Aesthetics",
-  "short_name": "HSA",
-  "description": "AI-powered facial analysis for personalized aesthetic treatment recommendations by Harley Street Aesthetics",
+  "name": "Skin Lab Aesthetics",
+  "short_name": "SLA",
+  "description": "AI-powered facial analysis for personalized aesthetic treatment recommendations by Skin Lab Aesthetics",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",

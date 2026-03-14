@@ -20,8 +20,8 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Harley Street Aesthetics | Personalised Filler Analysis",
-  description: "AI-powered facial analysis for personalised aesthetic treatment recommendations by Harley Street Aesthetics",
+  title: "Skin Lab Aesthetics | Personalised Filler Analysis",
+  description: "AI-powered facial analysis for personalised aesthetic treatment recommendations by Skin Lab Aesthetics",
   manifest: "/manifest.json",
   icons: {
     icon: [

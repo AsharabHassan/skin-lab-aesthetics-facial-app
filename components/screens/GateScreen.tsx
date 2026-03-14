@@ -138,7 +138,7 @@ export default function GateScreen() {
               </div>
             </div>
             <span className="font-mono text-[9px] text-white/25 leading-relaxed group-hover:text-white/40 transition-colors">
-              I consent to receive my analysis results and aesthetic communications from Harley Street Aesthetics in accordance with UK data protection law.
+              I consent to receive my analysis results and aesthetic communications from Skin Lab Aesthetics in accordance with data protection law.
             </span>
           </label>
           {errors.marketingConsent && <p className="font-mono text-[9px] text-red-400/60">{errors.marketingConsent.message}</p>}
