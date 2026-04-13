@@ -15,7 +15,7 @@ export default function GateScreen() {
     setValue,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<LeadFormData>({ resolver: zodResolver(leadSchema) });
+  } = useForm<LeadFormData>({ resolver: zodResolver(leadSchema), defaultValues: { preferredDays: [] } });
 
   const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   const DAY_SHORT = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
