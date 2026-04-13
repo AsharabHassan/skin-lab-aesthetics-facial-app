@@ -31,18 +31,18 @@ export default function LandingScreen() {
 
         {/* Hero headline */}
         <motion.div variants={item} className="space-y-0">
-          <p className="label-xs mb-3">AI Facial Analysis</p>
+          <p className="label-xs mb-3">AI Thread Lift Assessment</p>
           <h1 className="font-serif text-[3.8rem] font-normal leading-[0.95] text-cream italic tracking-tight">
-            Reveal<br />Your<br />Aesthetic<br />Potential.
+            Discover<br />Your Thread<br />Lift<br />Potential.
           </h1>
         </motion.div>
 
         {/* Feature rows — Space Mono data table */}
         <motion.div variants={item} className="w-full mt-2">
           {[
-            { code: "001", label: "Facial Structure Analysis" },
-            { code: "002", label: "6-Zone Deep Assessment" },
-            { code: "003", label: "Free Online Consultation" },
+            { code: "001", label: "Thread Lift Zone Analysis" },
+            { code: "002", label: "6-Zone Laxity Assessment" },
+            { code: "003", label: "Suitability Score & Report" },
           ].map(({ code, label }) => (
             <div key={code} className="flex items-center gap-4 py-3 border-b border-gold/10 first:border-t">
               <span className="font-mono text-[9px] text-gold/40 w-7 flex-shrink-0">{code}</span>
@@ -65,7 +65,7 @@ export default function LandingScreen() {
           className="btn-gold w-full"
           onClick={() => dispatch({ type: "SET_SCREEN", screen: "capture" })}
         >
-          Begin Analysis →
+          Begin Assessment →
         </button>
         <p className="font-mono text-[8px] text-center text-white/20 tracking-widest">
           PRIVATE · SECURE · IMAGE NOT STORED

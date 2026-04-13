@@ -8,6 +8,7 @@ import AnalyzingScreen from "@/components/screens/AnalyzingScreen";
 import GateScreen from "@/components/screens/GateScreen";
 import ResultsScreen from "@/components/screens/ResultsScreen";
 import BookingScreen from "@/components/screens/BookingScreen";
+import ConfirmedScreen from "@/components/screens/ConfirmedScreen";
 
 function ScreenRouter() {
   const { state } = useApp();
@@ -19,6 +20,7 @@ function ScreenRouter() {
     gate:      <GateScreen />,
     results:   <ResultsScreen />,
     booking:   <BookingScreen />,
+    confirmed: <ConfirmedScreen />,
   };
 
   return (

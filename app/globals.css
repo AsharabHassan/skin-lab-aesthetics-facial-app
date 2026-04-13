@@ -140,4 +140,13 @@
     height: 1px;
     background: rgba(221,190,89,0.2);
   }
+
+  /* Hide scrollbar for date picker */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }

@@ -51,9 +51,12 @@ export async function POST(req: NextRequest) {
         phone,
         marketingConsent,
 
-        // ── Face analysis ────────────────────────────────
-        faceShape:       analysisResult?.faceShape ?? null,
-        overallSummary:  analysisResult?.overallSummary ?? null,
+        // ── Thread Lift Assessment ───────────────────────
+        faceShape:        analysisResult?.faceShape ?? null,
+        overallSummary:   analysisResult?.overallSummary ?? null,
+        threadLiftScore:  analysisResult?.threadLiftScore ?? null,
+        scoreCategory:    analysisResult?.scoreCategory ?? null,
+        candidateSummary: analysisResult?.candidateSummary ?? null,
         analysisSummary,
         ...zoneFields,
 
@@ -74,7 +77,7 @@ export async function POST(req: NextRequest) {
         meta_hashed_last_name:   lastName  ? sha256(lastName)  : null,
 
         // ── Meta ────────────────────────────────────────
-        source:      "Skin Lab Aesthetics Filler Analysis App",
+        source:      "Skin Lab Aesthetics Thread Lift Assessment App",
         submittedAt: new Date().toISOString(),
       }),
     });

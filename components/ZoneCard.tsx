@@ -5,9 +5,10 @@ import { motion } from "framer-motion";
 import { FaceZone } from "@/lib/types";
 
 const SEVERITY_COLORS = {
-  none:     { bar: "bg-white/10",   text: "text-white/30" },
-  mild:     { bar: "bg-gold/50",    text: "text-gold/60"  },
-  moderate: { bar: "bg-gold",       text: "text-gold"     },
+  none:        { bar: "bg-white/10",   text: "text-white/30" },
+  mild:        { bar: "bg-gold/40",    text: "text-gold/50"  },
+  moderate:    { bar: "bg-gold/70",    text: "text-gold/70"  },
+  significant: { bar: "bg-gold",       text: "text-gold"     },
 };
 
 interface Props {
@@ -28,7 +29,7 @@ export default function ZoneCard({ zone, isActive, onClick }: Props) {
     <motion.div
       layout
       className="cursor-pointer transition-colors duration-200 border-b border-white/5"
-      style={{ borderLeft: `2px solid ${isActive ? "#ddbe59" : zone.severity === "none" ? "rgba(255,255,255,0.06)" : "rgba(221,190,89,0.35)"}` }}
+      style={{ borderLeft: `2px solid ${isActive ? "#ddbe59" : zone.severity === "none" ? "rgba(255,255,255,0.06)" : zone.severity === "significant" ? "rgba(221,190,89,0.9)" : "rgba(221,190,89,0.35)"}` }}
       onClick={() => { onClick(); setExpanded((v) => !v); }}
     >
       <div className="flex items-center gap-3 py-3 pl-3 pr-2">
@@ -64,7 +65,7 @@ export default function ZoneCard({ zone, isActive, onClick }: Props) {
             <p className="font-mono text-[9px] text-white/35 leading-relaxed">{zone.concern}</p>
             {zone.severity !== "none" && (
               <p className={`font-mono text-[8px] mt-1.5 tracking-widest uppercase ${sev.text}`}>
-                {zone.severity} severity
+                {zone.severity} laxity
               </p>
             )}
           </div>

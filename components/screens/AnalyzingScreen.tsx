@@ -5,12 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useApp } from "@/lib/store";
 
 const ZONES = [
-  { id: "01", name: "FOREHEAD" },
-  { id: "02", name: "TEMPLES" },
-  { id: "03", name: "UNDER-EYES" },
-  { id: "04", name: "CHEEKS" },
-  { id: "05", name: "LIPS" },
-  { id: "06", name: "JAWLINE" },
+  { id: "01", name: "MID-FACE" },
+  { id: "02", name: "JOWLS" },
+  { id: "03", name: "JAWLINE" },
+  { id: "04", name: "NECK" },
+  { id: "05", name: "NASOLABIAL" },
+  { id: "06", name: "MARIONETTE" },
 ];
 
 export default function AnalyzingScreen() {
@@ -113,7 +113,7 @@ export default function AnalyzingScreen() {
       >
         {/* Top status bar */}
         <div className="flex items-center justify-between">
-          <span className="label-xs">SLA · Analysis Engine</span>
+          <span className="label-xs">SLA · Thread Lift Engine</span>
           <span className="font-mono text-[8px] text-gold/40 tracking-widest">
             SYS.ACTIVE <span className="animate-blink">▮</span>
           </span>
@@ -126,14 +126,14 @@ export default function AnalyzingScreen() {
               Analysing
             </h2>
             <p className="font-mono text-[9px] text-gold/50 tracking-widest">
-              PROCESSING FACIAL DATA{dots}
+              ASSESSING FACIAL LAXITY{dots}
             </p>
           </div>
         </div>
 
         {/* Terminal zone readout */}
         <div className="font-mono text-[10px] space-y-1.5">
-          <div className="text-gold/30 text-[8px] tracking-widest mb-3">ZONE SCAN STATUS</div>
+          <div className="text-gold/30 text-[8px] tracking-widest mb-3">LAXITY SCAN STATUS</div>
           {ZONES.map((zone, i) => {
             const isDone = i < activeZone;
             const isActive = i === activeZone;

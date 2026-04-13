@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
-import { FILLER_ANALYSIS_PROMPT } from "@/lib/prompts";
+import { THREADLIFT_ANALYSIS_PROMPT } from "@/lib/prompts";
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -14,13 +14,16 @@ const faceZoneSchema = z.object({
   name: z.string(),
   concern: z.string(),
   recommendation: z.string(),
-  severity: z.enum(["none", "mild", "moderate"]),
-  overlayRegion: z.enum(["forehead", "temples", "undereyes", "cheeks", "lips", "jawline"]),
+  severity: z.enum(["none", "mild", "moderate", "significant"]),
+  overlayRegion: z.enum(["midface", "jowls", "jawline", "neck", "nasolabial", "marionette"]),
 });
 
 const analysisResultSchema = z.object({
   faceShape: z.string(),
   overallSummary: z.string(),
+  threadLiftScore: z.number().min(0).max(100),
+  scoreCategory: z.string(),
+  candidateSummary: z.string(),
   zones: z.array(faceZoneSchema).length(6),
 });
 
@@ -59,7 +62,7 @@ export async function POST(req: NextRequest) {
             },
             {
               type: "text",
-              text: FILLER_ANALYSIS_PROMPT,
+              text: THREADLIFT_ANALYSIS_PROMPT,
             },
           ],
         },
@@ -80,7 +83,7 @@ export async function POST(req: NextRequest) {
     try {
       parsed = JSON.parse(cleanedText);
     } catch {
-      console.error("Claude returned non-JSON:", responseText.slice(0, 200));
+      console.error("Claude returned non-JSON:", responseText.slice(0, 300));
       return NextResponse.json(
         { error: "Analysis failed. Please try again." },
         { status: 500 }

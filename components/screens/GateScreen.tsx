@@ -94,10 +94,10 @@ export default function GateScreen() {
             <div className="h-px flex-1 bg-gold/20" />
           </div>
           <h2 className="font-serif text-[3.2rem] font-normal italic text-cream leading-[1.0]">
-            Your Analysis<br />Is Ready.
+            Your Assessment<br />Is Ready.
           </h2>
           <p className="font-mono text-[8px] text-white/30 tracking-[0.3em] uppercase">
-            Enter details to unlock your report
+            Enter details to unlock your thread lift report
           </p>
         </div>
 
@@ -138,7 +138,7 @@ export default function GateScreen() {
               </div>
             </div>
             <span className="font-mono text-[9px] text-white/25 leading-relaxed group-hover:text-white/40 transition-colors">
-              I consent to receive my analysis results and aesthetic communications from Skin Lab Aesthetics in accordance with data protection law.
+              I consent to receive my thread lift assessment results and aesthetic communications from Skin Lab Aesthetics in accordance with data protection law.
             </span>
           </label>
           {errors.marketingConsent && <p className="font-mono text-[9px] text-red-400/60">{errors.marketingConsent.message}</p>}

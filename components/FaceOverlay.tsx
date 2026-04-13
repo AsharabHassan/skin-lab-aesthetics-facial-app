@@ -5,13 +5,14 @@ import { FaceZone } from "@/lib/types";
 
 // Positions as % of image dimensions, calibrated for a mirrored selfie
 // where the face fills roughly the central 60-80% of the frame.
+// Updated for thread lift zones focusing on lower face and laxity areas.
 const ZONE_POSITIONS: Record<string, { x: number; y: number }> = {
-  forehead:  { x: 50, y: 28 },
-  temples:   { x: 42, y: 36 },
-  undereyes: { x: 60, y: 44 },
-  cheeks:    { x: 42, y: 56 },
-  lips:      { x: 50, y: 65 },
-  jawline:   { x: 50, y: 78 },
+  midface:    { x: 50, y: 40 },
+  jowls:     { x: 38, y: 68 },
+  jawline:   { x: 50, y: 76 },
+  neck:      { x: 50, y: 88 },
+  nasolabial: { x: 60, y: 54 },
+  marionette: { x: 42, y: 62 },
 };
 
 interface Props {
