@@ -8,7 +8,7 @@ export const leadSchema = z.object({
     .string()
     .min(7, "Enter a valid phone number")
     .regex(/^[+\d\s\-()]+$/, "Enter a valid phone number"),
-  preferredDays: z.array(z.string()).optional().default([]),
+  preferredDays: z.array(z.string()).default([]),
   preferredTime: z.string().optional(),
   marketingConsent: z.boolean().refine((v) => v === true, {
     message: "You must agree to continue",
