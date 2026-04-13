@@ -36,6 +36,8 @@ export interface LeadData {
   lastName: string;
   email: string;
   phone: string;
+  preferredDays: string[];
+  preferredTime?: string;
   marketingConsent: boolean;
 }
 

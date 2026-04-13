@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   },
 };
 
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "424986547363126";
+const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "976460478218743";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

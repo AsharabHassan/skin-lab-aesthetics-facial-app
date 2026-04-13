@@ -9,6 +9,7 @@ export async function POST(req: NextRequest) {
   try {
     const {
       firstName, lastName, email, phone, marketingConsent,
+      preferredDays, preferredTime,
       analysisResult,
       metaEventId, metaEventSourceUrl, metaUserAgent, metaFbp, metaFbc,
     } = await req.json();
@@ -44,41 +45,47 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ── Contact details ──────────────────────────────
+
+        // ── 1. CONTACT ───────────────────────────────────────
         firstName,
         lastName,
         email,
         phone,
         marketingConsent,
 
-        // ── Thread Lift Assessment ───────────────────────
-        faceShape:        analysisResult?.faceShape ?? null,
-        overallSummary:   analysisResult?.overallSummary ?? null,
-        threadLiftScore:  analysisResult?.threadLiftScore ?? null,
-        scoreCategory:    analysisResult?.scoreCategory ?? null,
-        candidateSummary: analysisResult?.candidateSummary ?? null,
-        analysisSummary,
+        // ── 2. BOOKING PREFERENCES ───────────────────────────
+        preferred_days:  Array.isArray(preferredDays) && preferredDays.length > 0
+                           ? preferredDays.join(", ")
+                           : null,
+        preferred_time:  preferredTime ?? null,
+
+        // ── 3. FACE ANALYSIS ─────────────────────────────────
+        face_shape:        analysisResult?.faceShape ?? null,
+        overall_summary:   analysisResult?.overallSummary ?? null,
+        thread_lift_score: analysisResult?.threadLiftScore ?? null,
+        score_category:    analysisResult?.scoreCategory ?? null,
+        candidate_summary: analysisResult?.candidateSummary ?? null,
+        analysis_summary:  analysisSummary || null,
         ...zoneFields,
 
-        // ── Meta Conversions API fields ──────────────────
-        meta_pixel_id:         process.env.NEXT_PUBLIC_META_PIXEL_ID || "424986547363126",
-        meta_event_id:         metaEventId ?? null,
-        meta_event_name:       "Lead",
-        meta_event_source_url: metaEventSourceUrl ?? null,
-        // Server-side user data (for CAPI)
-        meta_client_ip_address:  clientIp,
-        meta_client_user_agent:  metaUserAgent ?? req.headers.get("user-agent"),
-        meta_fbp:                metaFbp ?? null,
-        meta_fbc:                metaFbc ?? null,
-        // SHA-256 hashed PII (required by Meta CAPI)
-        meta_hashed_email:       email   ? sha256(email)   : null,
-        meta_hashed_phone:       phone   ? sha256(phone)   : null,
-        meta_hashed_first_name:  firstName ? sha256(firstName) : null,
-        meta_hashed_last_name:   lastName  ? sha256(lastName)  : null,
+        // ── 4. META CONVERSIONS API ──────────────────────────
+        meta_pixel_id:            process.env.NEXT_PUBLIC_META_PIXEL_ID || "976460478218743",
+        meta_event_name:          "Lead",
+        meta_event_id:            metaEventId ?? null,
+        meta_event_source_url:    metaEventSourceUrl ?? null,
+        meta_client_ip_address:   clientIp,
+        meta_client_user_agent:   metaUserAgent ?? req.headers.get("user-agent"),
+        meta_fbp:                 metaFbp ?? null,
+        meta_fbc:                 metaFbc ?? null,
+        meta_hashed_email:        email     ? sha256(email)     : null,
+        meta_hashed_phone:        phone     ? sha256(phone)     : null,
+        meta_hashed_first_name:   firstName ? sha256(firstName) : null,
+        meta_hashed_last_name:    lastName  ? sha256(lastName)  : null,
 
-        // ── Meta ────────────────────────────────────────
-        source:      "Skin Lab Aesthetics Thread Lift Assessment App",
-        submittedAt: new Date().toISOString(),
+        // ── 5. METADATA ──────────────────────────────────────
+        source:       "Skin Lab Aesthetics Thread Lift Assessment App",
+        submitted_at: new Date().toISOString(),
+
       }),
     });
 
