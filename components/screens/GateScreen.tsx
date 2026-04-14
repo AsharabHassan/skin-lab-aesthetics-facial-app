@@ -12,24 +12,8 @@ export default function GateScreen() {
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
     formState: { errors, isSubmitting },
-  } = useForm<LeadFormData>({ resolver: zodResolver(leadSchema), defaultValues: { preferredDays: [] } });
-
-  const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-  const DAY_SHORT = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const TIMES = ["Morning (9am–12pm)", "Afternoon (12pm–5pm)", "Evening (5pm–8pm)"];
-
-  const selectedDays: string[] = watch("preferredDays") ?? [];
-  const selectedTime = watch("preferredTime");
-
-  function toggleDay(day: string) {
-    const next = selectedDays.includes(day)
-      ? selectedDays.filter((d) => d !== day)
-      : [...selectedDays, day];
-    setValue("preferredDays", next);
-  }
+  } = useForm<LeadFormData>({ resolver: zodResolver(leadSchema) });
 
   function onSubmit(data: LeadFormData) {
     // Generate unique event ID for Meta CAPI deduplication
@@ -43,32 +27,31 @@ export default function GateScreen() {
     const fbp = getCookie("_fbp");
     const fbc = getCookie("_fbc");
 
-    // Fire Meta Pixel Lead event client-side (for deduplication with CAPI)
+    // Fire Meta Pixel Lead event client-side
     if (typeof window !== "undefined" && (window as any).fbq) {
       (window as any).fbq("track", "Lead", {}, { eventID: metaEventId });
     }
 
+    // Build analysis summary for webhook
+    const analysisSummary = state.analysisResult?.zones
+      ?.map((z) => `${z.name} (${z.severity}): ${z.concern} → ${z.recommendation}`)
+      .join("\n") ?? "";
+
+    // Fire first webhook — contact + full analysis, no booking yet
     fetch("/api/leads", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        phone: data.phone,
-        marketingConsent: data.marketingConsent,
-        preferredDays: data.preferredDays ?? [],
-        preferredTime: data.preferredTime ?? null,
+        firstName:      data.firstName,
+        lastName:       data.lastName,
+        email:          data.email,
+        phone:          data.phone,
         analysisResult: state.analysisResult,
-        // Meta CAPI fields
-        metaEventId,
-        metaEventSourceUrl: window.location.href,
-        metaUserAgent: navigator.userAgent,
-        metaFbp: fbp,
-        metaFbc: fbc,
+        analysisSummary,
       }),
-    }).catch((err) => console.error("Lead submission error:", err));
+    }).catch((err) => console.error("Lead webhook error:", err));
 
+    // Save lead data to state
     dispatch({
       type: "SET_LEAD",
       lead: {
@@ -76,11 +59,24 @@ export default function GateScreen() {
         lastName: data.lastName,
         email: data.email,
         phone: data.phone,
-        preferredDays: data.preferredDays ?? [],
-        preferredTime: data.preferredTime,
+        preferredDays: [],
+        preferredTime: undefined,
         marketingConsent: data.marketingConsent,
       },
     });
+
+    // Save Meta fields to state so booking step can include them in the single webhook
+    dispatch({
+      type: "SET_META",
+      meta: {
+        eventId: metaEventId,
+        sourceUrl: window.location.href,
+        userAgent: navigator.userAgent,
+        fbp,
+        fbc,
+      },
+    });
+
     dispatch({ type: "SET_SCREEN", screen: "results" });
   }
 
@@ -146,48 +142,6 @@ export default function GateScreen() {
             <label className="label-xs">Phone</label>
             <input {...register("phone")} type="tel" placeholder="+44 7700 000000" className="input-field" />
             {errors.phone && <p className="font-mono text-[9px] text-red-400/60 mt-1">{errors.phone.message}</p>}
-          </div>
-
-          {/* Preferred days */}
-          <div className="space-y-2">
-            <label className="label-xs">Preferred Days <span className="text-white/20">(optional)</span></label>
-            <div className="grid grid-cols-7 gap-1">
-              {DAYS.map((day, i) => (
-                <button
-                  key={day}
-                  type="button"
-                  onClick={() => toggleDay(day)}
-                  className={`py-2 font-mono text-[8px] tracking-wide border transition-all duration-150 ${
-                    selectedDays.includes(day)
-                      ? "border-gold bg-gold/10 text-gold"
-                      : "border-white/10 text-white/30 hover:border-white/25 hover:text-white/50"
-                  }`}
-                >
-                  {DAY_SHORT[i]}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Preferred time */}
-          <div className="space-y-2">
-            <label className="label-xs">Preferred Time <span className="text-white/20">(optional)</span></label>
-            <div className="grid grid-cols-3 gap-1.5">
-              {TIMES.map((slot) => (
-                <button
-                  key={slot}
-                  type="button"
-                  onClick={() => setValue("preferredTime", selectedTime === slot ? undefined : slot)}
-                  className={`py-2.5 px-1 font-mono text-[8px] tracking-wide border transition-all duration-150 leading-relaxed ${
-                    selectedTime === slot
-                      ? "border-gold bg-gold/10 text-gold"
-                      : "border-white/10 text-white/30 hover:border-white/25 hover:text-white/50"
-                  }`}
-                >
-                  {slot}
-                </button>
-              ))}
-            </div>
           </div>
 
           {/* Consent checkbox */}

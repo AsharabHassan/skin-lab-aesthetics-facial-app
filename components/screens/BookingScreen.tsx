@@ -85,22 +85,20 @@ export default function BookingScreen() {
       ?.map((z) => `${z.name} (${z.severity}): ${z.concern} → ${z.recommendation}`)
       .join("\n") ?? "";
 
-    // Send to webhook
+    // Send single webhook with all data
     try {
       await fetch("/api/booking", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          firstName: state.leadData?.firstName,
-          lastName: state.leadData?.lastName,
-          email: state.leadData?.email,
-          phone: state.leadData?.phone,
-          bookingDate: selectedDate,
-          bookingTime: selectedTime,
-          slotType: "preference",
-          threadLiftScore: state.analysisResult?.threadLiftScore,
-          scoreCategory: state.analysisResult?.scoreCategory,
-          candidateSummary: state.analysisResult?.candidateSummary,
+          firstName:      state.leadData?.firstName,
+          lastName:       state.leadData?.lastName,
+          email:          state.leadData?.email,
+          phone:          state.leadData?.phone,
+          bookingDate:    selectedDate,
+          bookingTime:    selectedTime,
+          slotType:       "preference",
+          analysisResult: state.analysisResult,
           analysisSummary,
         }),
       });

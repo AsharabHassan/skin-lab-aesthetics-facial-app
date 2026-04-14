@@ -101,9 +101,10 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ result: result.data });
   } catch (error) {
-    console.error("Analysis error:", error);
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Analysis error:", message);
     return NextResponse.json(
-      { error: "Analysis failed. Please try again." },
+      { error: "Analysis failed. Please try again.", details: message },
       { status: 500 }
     );
   }

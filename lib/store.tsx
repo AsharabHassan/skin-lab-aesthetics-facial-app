@@ -1,13 +1,14 @@
 "use client";
 
 import { createContext, useContext, useReducer, ReactNode } from "react";
-import { AppState, Screen, AnalysisResult, LeadData, BookingData } from "./types";
+import { AppState, Screen, AnalysisResult, LeadData, BookingData, MetaData } from "./types";
 
 type Action =
   | { type: "SET_SCREEN"; screen: Screen }
   | { type: "SET_IMAGE"; imageDataUrl: string }
   | { type: "SET_ANALYSIS"; result: AnalysisResult }
   | { type: "SET_LEAD"; lead: LeadData }
+  | { type: "SET_META"; meta: MetaData }
   | { type: "SET_BOOKING"; booking: BookingData }
   | { type: "RESET" };
 
@@ -17,6 +18,7 @@ const initialState: AppState = {
   analysisResult: null,
   leadData: null,
   bookingData: null,
+  metaData: null,
 };
 
 function reducer(state: AppState, action: Action): AppState {
@@ -29,6 +31,8 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, analysisResult: action.result };
     case "SET_LEAD":
       return { ...state, leadData: action.lead };
+    case "SET_META":
+      return { ...state, metaData: action.meta };
     case "SET_BOOKING":
       return { ...state, bookingData: action.booking };
     case "RESET":

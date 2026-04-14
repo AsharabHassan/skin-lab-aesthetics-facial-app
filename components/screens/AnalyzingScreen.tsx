@@ -17,6 +17,7 @@ export default function AnalyzingScreen() {
   const { state, dispatch } = useApp();
   const [activeZone, setActiveZone] = useState(0);
   const [dots, setDots] = useState(".");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
     if (!state.imageDataUrl) {
@@ -26,7 +27,7 @@ export default function AnalyzingScreen() {
 
     let unmounted = false;
     let controller = new AbortController();
-    let timeout = setTimeout(() => controller.abort(), 150000); // 150s timeout
+    let timeout = setTimeout(() => controller.abort(), 150000);
 
     async function attemptAnalyze(): Promise<boolean> {
       try {
@@ -44,9 +45,16 @@ export default function AnalyzingScreen() {
           dispatch({ type: "SET_SCREEN", screen: "gate" });
           return true;
         }
+        // API returned an error payload — log full details in console
+        const errDetail = data.details || data.error || "Unknown error";
+        console.error("Analyze API error:", errDetail);
+        if (!unmounted) setErrorMsg(errDetail);
         return false;
-      } catch {
+      } catch (err) {
         clearTimeout(timeout);
+        // Don't treat an abort (from cleanup) as a real error
+        if (err instanceof Error && err.name === "AbortError") return false;
+        console.error("Analyze fetch error:", err);
         return false;
       }
     }
@@ -55,13 +63,13 @@ export default function AnalyzingScreen() {
       const success = await attemptAnalyze();
       if (unmounted) return;
       if (!success) {
-        // Retry once with a fresh controller and 150s timeout
+        // Retry once with a fresh controller
         controller = new AbortController();
         timeout = setTimeout(() => controller.abort(), 150000);
         const retrySuccess = await attemptAnalyze();
         if (unmounted) return;
         if (!retrySuccess) {
-          dispatch({ type: "SET_SCREEN", screen: "capture" });
+          setErrorMsg("Analysis failed. Please retake your photo and try again.");
         }
       }
     }
@@ -80,6 +88,26 @@ export default function AnalyzingScreen() {
     }, 400);
     return () => { clearInterval(zoneInterval); clearInterval(dotInterval); };
   }, []);
+
+  if (errorMsg) {
+    return (
+      <div className="screen items-center justify-center gap-6">
+        <div className="text-center space-y-3">
+          <p className="font-mono text-[10px] text-gold/50 tracking-widest uppercase">Analysis Failed</p>
+          <p className="font-mono text-[11px] text-white/40 leading-relaxed max-w-xs">{errorMsg}</p>
+          <p className="font-mono text-[9px] text-white/20 leading-relaxed max-w-xs">
+            Check the browser console and server terminal for the exact error.
+          </p>
+        </div>
+        <button
+          className="btn-gold w-full"
+          onClick={() => dispatch({ type: "SET_SCREEN", screen: "capture" })}
+        >
+          Retake Photo →
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="screen items-stretch justify-between relative overflow-hidden py-10">

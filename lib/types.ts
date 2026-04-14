@@ -41,6 +41,14 @@ export interface LeadData {
   marketingConsent: boolean;
 }
 
+export interface MetaData {
+  eventId: string;
+  sourceUrl: string;
+  userAgent: string;
+  fbp: string | null;
+  fbc: string | null;
+}
+
 export interface BookingData {
   date: string;          // ISO date string e.g. "2026-04-15"
   time: string;          // e.g. "12:00 PM"
@@ -53,4 +61,5 @@ export interface AppState {
   analysisResult: AnalysisResult | null;
   leadData: LeadData | null;
   bookingData: BookingData | null;
+  metaData: MetaData | null;
 }

@@ -1,96 +1,88 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createHash } from "crypto";
-
-function sha256(value: string): string {
-  return createHash("sha256").update(value.trim().toLowerCase()).digest("hex");
-}
 
 export async function POST(req: NextRequest) {
   try {
-    const {
-      firstName, lastName, email, phone, marketingConsent,
-      preferredDays, preferredTime,
-      analysisResult,
-      metaEventId, metaEventSourceUrl, metaUserAgent, metaFbp, metaFbc,
-    } = await req.json();
+    const { firstName, lastName, email, phone, analysisResult, analysisSummary } = await req.json();
 
     const webhookUrl = process.env.WEBHOOK_URL || "https://services.leadconnectorhq.com/hooks/8uElW7d5ZvUZkgLgQDN8/webhook-trigger/0mtWSQpsC0DEeLhb1gEK";
 
-    // Extract client IP for Meta CAPI
-    const clientIp =
-      req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
-      req.headers.get("x-real-ip") ??
-      null;
-
-    // Flatten zones into individual fields for CRM readability
-    const zoneFields: Record<string, string> = {};
-    if (analysisResult?.zones) {
+    // Flatten each zone into individual named fields
+    const zones: Record<string, string> = {};
+    if (Array.isArray(analysisResult?.zones)) {
       for (const zone of analysisResult.zones) {
-        const key = zone.overlayRegion;
-        zoneFields[`zone_${key}_name`]          = zone.name;
-        zoneFields[`zone_${key}_concern`]        = zone.concern;
-        zoneFields[`zone_${key}_recommendation`] = zone.recommendation;
-        zoneFields[`zone_${key}_severity`]       = zone.severity;
+        const k = zone.overlayRegion; // midface | jowls | jawline | neck | nasolabial | marionette
+        zones[`zone_${k}_name`]           = zone.name;
+        zones[`zone_${k}_concern`]        = zone.concern;
+        zones[`zone_${k}_recommendation`] = zone.recommendation;
+        zones[`zone_${k}_severity`]       = zone.severity;
       }
     }
-
-    // Plain-text summary for CRM notes
-    const analysisSummary = analysisResult?.zones
-      ?.map((z: { name: string; severity: string; concern: string; recommendation: string }) =>
-        `${z.name} (${z.severity}): ${z.concern} → ${z.recommendation}`
-      )
-      .join("\n") ?? "";
 
     const response = await fetch(webhookUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
 
-        // ── 1. CONTACT ───────────────────────────────────────
+        // ── CONTACT ──────────────────────────────────────────
         firstName,
         lastName,
         email,
         phone,
-        marketingConsent,
 
-        // ── 2. BOOKING PREFERENCES ───────────────────────────
-        preferred_days:  Array.isArray(preferredDays) && preferredDays.length > 0
-                           ? preferredDays.join(", ")
-                           : null,
-        preferred_time:  preferredTime ?? null,
+        // ── OVERALL ANALYSIS ─────────────────────────────────
+        faceShape:        analysisResult?.faceShape        ?? null,
+        overallSummary:   analysisResult?.overallSummary   ?? null,
+        threadLiftScore:  analysisResult?.threadLiftScore  ?? null,
+        scoreCategory:    analysisResult?.scoreCategory    ?? null,
+        candidateSummary: analysisResult?.candidateSummary ?? null,
+        analysisSummary:  analysisSummary                  ?? null,
 
-        // ── 3. FACE ANALYSIS ─────────────────────────────────
-        face_shape:        analysisResult?.faceShape ?? null,
-        overall_summary:   analysisResult?.overallSummary ?? null,
-        thread_lift_score: analysisResult?.threadLiftScore ?? null,
-        score_category:    analysisResult?.scoreCategory ?? null,
-        candidate_summary: analysisResult?.candidateSummary ?? null,
-        analysis_summary:  analysisSummary || null,
-        ...zoneFields,
+        // ── ZONE: MID-FACE ────────────────────────────────────
+        zone_midface_name:           zones.zone_midface_name           ?? null,
+        zone_midface_concern:        zones.zone_midface_concern        ?? null,
+        zone_midface_recommendation: zones.zone_midface_recommendation ?? null,
+        zone_midface_severity:       zones.zone_midface_severity       ?? null,
 
-        // ── 4. META CONVERSIONS API ──────────────────────────
-        meta_pixel_id:            process.env.NEXT_PUBLIC_META_PIXEL_ID || "976460478218743",
-        meta_event_name:          "Lead",
-        meta_event_id:            metaEventId ?? null,
-        meta_event_source_url:    metaEventSourceUrl ?? null,
-        meta_client_ip_address:   clientIp,
-        meta_client_user_agent:   metaUserAgent ?? req.headers.get("user-agent"),
-        meta_fbp:                 metaFbp ?? null,
-        meta_fbc:                 metaFbc ?? null,
-        meta_hashed_email:        email     ? sha256(email)     : null,
-        meta_hashed_phone:        phone     ? sha256(phone)     : null,
-        meta_hashed_first_name:   firstName ? sha256(firstName) : null,
-        meta_hashed_last_name:    lastName  ? sha256(lastName)  : null,
+        // ── ZONE: JOWLS ───────────────────────────────────────
+        zone_jowls_name:           zones.zone_jowls_name           ?? null,
+        zone_jowls_concern:        zones.zone_jowls_concern        ?? null,
+        zone_jowls_recommendation: zones.zone_jowls_recommendation ?? null,
+        zone_jowls_severity:       zones.zone_jowls_severity       ?? null,
 
-        // ── 5. METADATA ──────────────────────────────────────
-        source:       "Skin Lab Aesthetics Thread Lift Assessment App",
-        submitted_at: new Date().toISOString(),
+        // ── ZONE: JAWLINE ─────────────────────────────────────
+        zone_jawline_name:           zones.zone_jawline_name           ?? null,
+        zone_jawline_concern:        zones.zone_jawline_concern        ?? null,
+        zone_jawline_recommendation: zones.zone_jawline_recommendation ?? null,
+        zone_jawline_severity:       zones.zone_jawline_severity       ?? null,
+
+        // ── ZONE: NECK ────────────────────────────────────────
+        zone_neck_name:           zones.zone_neck_name           ?? null,
+        zone_neck_concern:        zones.zone_neck_concern        ?? null,
+        zone_neck_recommendation: zones.zone_neck_recommendation ?? null,
+        zone_neck_severity:       zones.zone_neck_severity       ?? null,
+
+        // ── ZONE: NASOLABIAL FOLDS ────────────────────────────
+        zone_nasolabial_name:           zones.zone_nasolabial_name           ?? null,
+        zone_nasolabial_concern:        zones.zone_nasolabial_concern        ?? null,
+        zone_nasolabial_recommendation: zones.zone_nasolabial_recommendation ?? null,
+        zone_nasolabial_severity:       zones.zone_nasolabial_severity       ?? null,
+
+        // ── ZONE: MARIONETTE LINES ────────────────────────────
+        zone_marionette_name:           zones.zone_marionette_name           ?? null,
+        zone_marionette_concern:        zones.zone_marionette_concern        ?? null,
+        zone_marionette_recommendation: zones.zone_marionette_recommendation ?? null,
+        zone_marionette_severity:       zones.zone_marionette_severity       ?? null,
+
+        // ── META ──────────────────────────────────────────────
+        source:      "Skin Lab Aesthetics Thread Lift Assessment App",
+        eventType:   "lead_capture",
+        submittedAt: new Date().toISOString(),
 
       }),
     });
 
     if (!response.ok) {
-      console.error("Webhook error:", response.status);
+      console.error("Lead webhook error:", response.status);
       return NextResponse.json({ success: true, warning: "Webhook delivery failed" });
     }
 
