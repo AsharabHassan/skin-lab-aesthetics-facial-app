@@ -94,8 +94,8 @@ export default function AnalyzingScreen() {
       <div className="screen items-center justify-center gap-6">
         <div className="text-center space-y-3">
           <p className="font-mono text-[10px] text-gold/50 tracking-widest uppercase">Analysis Failed</p>
-          <p className="font-mono text-[11px] text-white/40 leading-relaxed max-w-xs">{errorMsg}</p>
-          <p className="font-mono text-[9px] text-white/20 leading-relaxed max-w-xs">
+          <p className="font-mono text-[11px] text-white/90 leading-relaxed max-w-xs">{errorMsg}</p>
+          <p className="font-mono text-[9px] text-white/75 leading-relaxed max-w-xs">
             Check the browser console and server terminal for the exact error.
           </p>
         </div>

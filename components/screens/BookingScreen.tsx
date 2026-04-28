@@ -130,7 +130,7 @@ export default function BookingScreen() {
             {firstName ? `${firstName},` : ""}<br />
             Let&apos;s Discuss<br />Your Results.
           </h2>
-          <p className="font-mono text-[9px] text-white/30 leading-relaxed mt-2">
+          <p className="font-mono text-[9px] text-white/85 leading-relaxed mt-2">
             Select your preferred date and time. Our team will call you to confirm your consultation appointment.
           </p>
         </motion.div>
@@ -179,7 +179,7 @@ export default function BookingScreen() {
             >
               <div className="space-y-1">
                 <p className="label-xs">Preferred Time</p>
-                <p className="font-mono text-[8px] text-white/20 leading-relaxed">
+                <p className="font-mono text-[8px] text-white/80 leading-relaxed">
                   12:00 PM – 8:00 PM · Our team will confirm your slot
                 </p>
               </div>
@@ -236,7 +236,7 @@ export default function BookingScreen() {
               {/* Clinic address */}
               <div className="flex items-start gap-3 px-1">
                 <span className="font-mono text-[8px] text-gold/35 flex-shrink-0 pt-0.5">📍</span>
-                <span className="font-mono text-[9px] text-cream/35 leading-relaxed">{CLINIC_ADDRESS}</span>
+                <span className="font-mono text-[9px] text-white/85 leading-relaxed">{CLINIC_ADDRESS}</span>
               </div>
 
               {/* Confirm button */}

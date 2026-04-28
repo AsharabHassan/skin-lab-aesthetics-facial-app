@@ -57,7 +57,7 @@ export default function ConfirmedScreen() {
           <h2 className="font-serif text-[2.8rem] font-normal italic text-cream leading-[1.0]">
             Preference<br />Received.
           </h2>
-          <p className="font-mono text-[9px] text-white/30 leading-relaxed max-w-[280px] mx-auto">
+          <p className="font-mono text-[9px] text-white/85 leading-relaxed max-w-[280px] mx-auto">
             Our team will call you within 24 hours to confirm your consultation appointment.
           </p>
         </motion.div>
@@ -75,13 +75,13 @@ export default function ConfirmedScreen() {
               <div className="space-y-2.5">
                 <div className="flex items-start gap-3">
                   <span className="font-mono text-[8px] text-gold/35 w-10 flex-shrink-0 pt-0.5">DATE</span>
-                  <span className="font-serif text-[1rem] italic text-cream/80">
+                  <span className="font-serif text-[1rem] italic text-white">
                     {formatDateFull(bookingData.date)}
                   </span>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="font-mono text-[8px] text-gold/35 w-10 flex-shrink-0 pt-0.5">TIME</span>
-                  <span className="font-serif text-[1rem] italic text-cream/80">
+                  <span className="font-serif text-[1rem] italic text-white">
                     {bookingData.time}
                     <span className="font-mono text-[8px] text-gold/40 ml-2 not-italic">
                       (to be confirmed)
@@ -91,7 +91,7 @@ export default function ConfirmedScreen() {
                 {leadData && (
                   <div className="flex items-start gap-3">
                     <span className="font-mono text-[8px] text-gold/35 w-10 flex-shrink-0 pt-0.5">NAME</span>
-                    <span className="font-serif text-[1rem] italic text-cream/80">
+                    <span className="font-serif text-[1rem] italic text-white">
                       {leadData.firstName} {leadData.lastName}
                     </span>
                   </div>
@@ -101,7 +101,7 @@ export default function ConfirmedScreen() {
 
             <div className="w-full h-px bg-gold/10" />
 
-            <p className="font-mono text-[8px] text-white/20 leading-relaxed">
+            <p className="font-mono text-[8px] text-white/80 leading-relaxed">
               We will contact you on the phone number provided to finalise your appointment time.
             </p>
           </div>
@@ -112,7 +112,7 @@ export default function ConfirmedScreen() {
           <span className="label-xs">Clinic Location</span>
           <div className="flex items-start gap-2.5 mt-1">
             <span className="text-[12px] flex-shrink-0">📍</span>
-            <span className="font-mono text-[9px] text-cream/40 leading-relaxed">{CLINIC_ADDRESS}</span>
+            <span className="font-mono text-[9px] text-white/85 leading-relaxed">{CLINIC_ADDRESS}</span>
           </div>
         </motion.div>
 
@@ -127,7 +127,7 @@ export default function ConfirmedScreen() {
           ].map(({ code, text }) => (
             <div key={code} className="flex items-center gap-3 py-2 border-b border-white/5">
               <span className="font-mono text-[8px] text-gold/30 flex-shrink-0">{code}</span>
-              <span className="font-mono text-[9px] text-cream/40 leading-relaxed">{text}</span>
+              <span className="font-mono text-[9px] text-white/85 leading-relaxed">{text}</span>
             </div>
           ))}
         </motion.div>

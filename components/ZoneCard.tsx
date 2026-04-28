@@ -40,10 +40,10 @@ export default function ZoneCard({ zone, isActive, onClick }: Props) {
 
         <div className="flex-1 min-w-0">
           {/* Name in Playfair italic */}
-          <p className={`font-serif text-[1.05rem] italic leading-tight ${isActive ? "text-white" : "text-white/80"}`}>
+          <p className={`font-serif text-[1.05rem] italic leading-tight ${isActive ? "text-white" : "text-white/95"}`}>
             {zone.name}
           </p>
-          <p className="font-mono text-[9px] text-white/60 truncate mt-0.5 tracking-wide">
+          <p className="font-mono text-[9px] text-white/85 truncate mt-0.5 tracking-wide">
             {zone.recommendation}
           </p>
         </div>
@@ -62,7 +62,7 @@ export default function ZoneCard({ zone, isActive, onClick }: Props) {
           className="pl-11 pr-3 pb-3"
         >
           <div className="border-t border-white/5 pt-2">
-            <p className="font-mono text-[9px] text-white/80 leading-relaxed">{zone.concern}</p>
+            <p className="font-mono text-[9px] text-white/90 leading-relaxed">{zone.concern}</p>
             {zone.severity !== "none" && (
               <p className={`font-mono text-[8px] mt-1.5 tracking-widest uppercase ${sev.text}`}>
                 {zone.severity} laxity

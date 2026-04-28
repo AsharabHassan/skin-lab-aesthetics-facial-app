@@ -44,7 +44,7 @@ export default function CaptureScreen() {
       {/* Instruction strip */}
       <div className="w-full flex items-center justify-between">
         {["Face forward", "Good lighting", "No glasses"].map((tip) => (
-          <span key={tip} className="font-mono text-[8px] text-white/25 tracking-wide">{tip}</span>
+          <span key={tip} className="font-mono text-[8px] text-white/85 tracking-wide">{tip}</span>
         ))}
       </div>
 
@@ -91,7 +91,7 @@ export default function CaptureScreen() {
           {/* Error */}
           {error && (
             <div className="absolute inset-0 flex items-center justify-center p-6 bg-obsidian/90">
-              <p className="font-mono text-[10px] text-white/40 text-center">{error}</p>
+              <p className="font-mono text-[10px] text-white/85 text-center">{error}</p>
             </div>
           )}
 

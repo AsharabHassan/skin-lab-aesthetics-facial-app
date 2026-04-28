@@ -97,7 +97,7 @@ function SuitabilityGauge({ score, category, summary }: { score: number; categor
         >
           {category}
         </span>
-        <p className="font-serif text-[0.95rem] italic text-white/70 leading-relaxed text-center max-w-[280px]">
+        <p className="font-serif text-[0.95rem] italic text-white/90 leading-relaxed text-center max-w-[280px]">
           {summary}
         </p>
       </div>
@@ -171,7 +171,7 @@ export default function ResultsScreen() {
         </div>
 
         {/* Disclaimer */}
-        <p className="font-mono text-[8px] text-white/15 text-center leading-relaxed tracking-wide">
+        <p className="font-mono text-[8px] text-white/70 text-center leading-relaxed tracking-wide">
           AI-GENERATED · FOR INFORMATIONAL PURPOSES ONLY<br />
           THREAD LIFT SUITABILITY CONFIRMED AT CONSULTATION
         </p>

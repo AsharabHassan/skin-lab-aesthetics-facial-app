@@ -47,7 +47,7 @@ export default function LandingScreen() {
             <div key={code} className="flex items-center gap-4 py-3 border-b border-gold/10 first:border-t">
               <span className="font-mono text-[9px] text-gold/40 w-7 flex-shrink-0">{code}</span>
               <div className="w-px h-3 bg-gold/15 flex-shrink-0" />
-              <span className="font-mono text-[10px] text-cream/50 tracking-wide">{label}</span>
+              <span className="font-mono text-[10px] text-white/90 tracking-wide">{label}</span>
               <span className="ml-auto font-mono text-[8px] text-gold/25">●</span>
             </div>
           ))}
@@ -67,7 +67,7 @@ export default function LandingScreen() {
         >
           Begin Assessment →
         </button>
-        <p className="font-mono text-[8px] text-center text-white/20 tracking-widest">
+        <p className="font-mono text-[8px] text-center text-white/70 tracking-widest">
           PRIVATE · SECURE · IMAGE NOT STORED
         </p>
       </motion.div>
