@@ -97,7 +97,7 @@ function SuitabilityGauge({ score, category, summary }: { score: number; categor
         >
           {category}
         </span>
-        <p className="font-serif text-[0.95rem] italic text-cream/55 leading-relaxed text-center max-w-[280px]">
+        <p className="font-serif text-[0.95rem] italic text-white/70 leading-relaxed text-center max-w-[280px]">
           {summary}
         </p>
       </div>
@@ -132,7 +132,7 @@ export default function ResultsScreen() {
             </span>
           </div>
           <div className="w-full h-px bg-gold/15" />
-          <h2 className="font-serif text-[2.8rem] font-normal italic text-cream leading-[1.0]">
+          <h2 className="font-serif text-[2.8rem] font-normal italic text-white leading-[1.0]">
             {leadData?.firstName ? `${leadData.firstName}'s` : "Your"}<br />
             Assessment.
           </h2>
@@ -152,7 +152,7 @@ export default function ResultsScreen() {
         {/* AI summary */}
         <div className="border-l-2 border-gold/30 pl-4 py-1 space-y-1.5">
           <p className="label-xs">Specialist Assessment</p>
-          <p className="font-serif text-[1.05rem] italic text-cream/70 leading-relaxed">
+          <p className="font-serif text-[1.05rem] italic text-white leading-relaxed">
             {analysisResult.overallSummary}
           </p>
         </div>
